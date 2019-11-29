@@ -1,0 +1,23 @@
+{
+  "name": "react-field-models",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ifelseapps/react-field-models.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ifelseapps/react-field-models/issues"
+  },
+  "homepage": "https://github.com/ifelseapps/react-field-models#readme",
+  "devDependencies": {
+    "typescript": "^3.7.2"
+  }
+}
