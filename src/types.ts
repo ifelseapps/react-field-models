@@ -1,6 +1,6 @@
 export interface IFieldInitial<TValue = any> {
   value: TValue;
-  onChange?: (value: TValue, apply?: () => void) => void;
+  onChange?: (value: TValue, apply?: (value: TValue) => void) => void;
   onValidate?: (value: TValue) => void;
 }
 
