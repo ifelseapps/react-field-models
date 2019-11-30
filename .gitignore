@@ -61,3 +61,5 @@ typings/
 .next
 
 .idea
+
+demo/dist/bundle.js
