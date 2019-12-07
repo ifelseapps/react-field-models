@@ -26,7 +26,7 @@ const CustomInput: FC<{ label: string, field: FieldExtra<IFieldInitial<string>> 
         <div>
           <span>{label}:</span>
           {field.value}
-          <button onClick={editHandler}>Edit</button>
+          <button className="btn btn-link" onClick={editHandler}>Edit</button>
         </div>
       );
     case 'edit':
@@ -56,7 +56,7 @@ const App: FC = () => {
   const fields = useFieldsModel({
     name: {
       type: 'input',
-      value: '',
+      value: 'Василий Фтулкин',
       mode: 'view',
       onChangeAsync: (apply, setMode) => value => {
         setMode('loading');
@@ -82,6 +82,9 @@ const App: FC = () => {
         E-mail:
         <Input value={fields.email.value} onChange={fields.email.onChange}/>
       </label>
+      <code>
+        <pre>{JSON.stringify(fields, null, '\t')}</pre>
+      </code>
     </div>
   )
 };
