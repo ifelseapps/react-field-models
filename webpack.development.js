@@ -1,12 +1,15 @@
 const path = require('path');
 
-const distFolder = path.resolve(__dirname, './demo/dist');
+const distFolder = path.resolve(__dirname, './demo');
 
 module.exports = {
-  entry: './demo/index.tsx',
+  entry: './src/index.tsx',
   output: {
     path: distFolder,
     filename: 'bundle.js',
+  },
+  resolve: {
+    extensions: ['.js', '.ts', '.tsx'],
   },
   devServer: {
     contentBase: distFolder,

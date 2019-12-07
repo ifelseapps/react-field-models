@@ -62,4 +62,4 @@ typings/
 
 .idea
 
-demo/dist/bundle.js
+demo/bundle.js
