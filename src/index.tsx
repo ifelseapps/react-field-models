@@ -6,13 +6,16 @@ import { useFieldsModel } from './lib/useFieldsModel';
 type InputProps = Partial<HTMLInputElement & { onChange: (value: string) => void }>;
 
 const Input: FC<InputProps> = ({ onChange, name, value }) =>
-  <input name={name} value={value} type="text" onChange={e => onChange(e.target.value)}/>;
+  <input className="form-control" name={name} value={value} type="text" onChange={e => onChange(e.target.value)}/>;
 
 const CustomInput: FC<{ label: string, field: FieldExtra<IFieldInitial<string>> }> = ({ label, field }) => {
   const [value, setValue] = useState<string>(field.value);
 
   const editHandler = useCallback(() => field.setMode('edit'), []);
-  const cancelHandler = useCallback(() => field.setMode('view'), []);
+  const cancelHandler = useCallback(() => {
+    setValue(field.value);
+    field.setMode('view');
+  }, []);
   const applyHandler = useCallback(() => {
     field.onChange(value);
     if (!field.onChangeAsync) {
@@ -23,7 +26,7 @@ const CustomInput: FC<{ label: string, field: FieldExtra<IFieldInitial<string>> 
   switch (field.mode) {
     case 'view':
       return (
-        <div>
+        <div className="form-group">
           <span>{label}:</span>
           {field.value}
           <button className="btn btn-link" onClick={editHandler}>Edit</button>
@@ -31,7 +34,7 @@ const CustomInput: FC<{ label: string, field: FieldExtra<IFieldInitial<string>> 
       );
     case 'edit':
       return (
-        <div>
+        <div className="form-group">
           <label>
             <span>{label}:</span>
             <Input value={value} onChange={setValue}/>
@@ -42,7 +45,7 @@ const CustomInput: FC<{ label: string, field: FieldExtra<IFieldInitial<string>> 
       );
     case 'loading':
       return (
-        <div>
+        <div className="form-group">
           <span>{label}:</span>
           Save...
         </div>
@@ -69,6 +72,7 @@ const App: FC = () => {
     email: {
       type: 'input',
       value: '',
+      onValidate: value => null
     }
   });
 
@@ -78,12 +82,12 @@ const App: FC = () => {
   return (
     <div>
       <CustomInput label="Имя" field={fields.name}/>
-      <label>
+      <label className="form-group">
         E-mail:
-        <Input value={fields.email.value} onChange={fields.email.onChange}/>
+        <Input className="form-control" value={fields.email.value} onChange={fields.email.onChange}/>
       </label>
       <code>
-        <pre>{JSON.stringify(fields, null, '\t')}</pre>
+        <pre><code>{JSON.stringify(fields, null, '  ')}</code></pre>
       </code>
     </div>
   )
