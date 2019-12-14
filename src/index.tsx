@@ -1,6 +1,6 @@
 import React, { FC, useCallback, useEffect, useState } from 'react'
 import { render } from 'react-dom';
-import { FieldExtra, IFieldInitial } from './lib/types';
+import { FieldExtra, IFieldProperties } from './lib/types';
 import { useFieldsModel } from './lib/useFieldsModel';
 
 type InputProps = Partial<HTMLInputElement & { onChange: (value: string) => void }>;
@@ -8,7 +8,7 @@ type InputProps = Partial<HTMLInputElement & { onChange: (value: string) => void
 const Input: FC<InputProps> = ({ onChange, name, value }) =>
   <input className="form-control" name={name} value={value} type="text" onChange={e => onChange(e.target.value)}/>;
 
-const CustomInput: FC<{ label: string, field: FieldExtra<IFieldInitial<string>> }> = ({ label, field }) => {
+const CustomInput: FC<{ label: string, field: FieldExtra<IFieldProperties<string>> }> = ({ label, field }) => {
   const [value, setValue] = useState<string>(field.value);
 
   const editHandler = useCallback(() => field.setMode('edit'), []);
@@ -61,6 +61,13 @@ const App: FC = () => {
       type: 'input',
       value: 'Василий Фтулкин',
       mode: 'view',
+    },
+    email: {
+      type: 'input',
+      value: ''
+    }
+  }, {
+    name: {
       onChangeAsync: (apply, setMode) => value => {
         setMode('loading');
         setTimeout(() => {
@@ -70,8 +77,6 @@ const App: FC = () => {
       }
     },
     email: {
-      type: 'input',
-      value: '',
       onValidate: value => null
     }
   });
