@@ -10,14 +10,15 @@ export interface IFieldProperties<TValue = any> {
 
 export interface IFieldCallbacks<TValue> {
   onChangeAsync?: (apply: OnChange<TValue>, setMode: SetMode) => OnChange<TValue>;
-  onValidate?: (value: TValue) => null | string[];
+  validate?: (value: TValue) => null | string[];
 }
 
-export type FieldExtra<TProperties extends IFieldProperties> = IFieldProperties & IFieldCallbacks<TProperties> & {
+export type FieldExtra<TProperties extends IFieldProperties> = IFieldProperties<TProperties['value']> & IFieldCallbacks<TProperties['value']> & {
   name: string;
   mode: Mode;
   errors: null | string[];
   onChange: OnChange<TProperties['value']>;
+  onValidate?: () => null | string[];
   setMode: SetMode;
 };
 
@@ -27,6 +28,6 @@ export type FieldsCallbacks<TInitial extends FieldsInitial> = Partial<{
   [TKey in keyof TInitial]: IFieldCallbacks<TInitial[TKey]['value']>;
 }>;
 
-export type FieldsExtra<TFields extends FieldsInitial> = {
-  [TKey in keyof TFields]: FieldExtra<TFields[TKey]>
+export type FieldsExtra<TInitials extends FieldsInitial> = {
+  [TKey in keyof TInitials]: FieldExtra<TInitials[TKey]>
 };

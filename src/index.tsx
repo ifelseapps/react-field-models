@@ -3,10 +3,10 @@ import { render } from 'react-dom';
 import { FieldExtra, IFieldProperties } from './lib/types';
 import { useFieldsModel } from './lib/useFieldsModel';
 
-type InputProps = Partial<HTMLInputElement & { onChange: (value: string) => void }>;
+type InputProps = Partial<HTMLInputElement & { onChange: (value: string) => void, onBlur: () => void, errors: null | string[] }>;
 
-const Input: FC<InputProps> = ({ onChange, name, value }) =>
-  <input className="form-control" name={name} value={value} type="text" onChange={e => onChange(e.target.value)}/>;
+const Input: FC<InputProps> = ({ onChange, onBlur, name, value, errors }) =>
+  <input className={'form-control' + (errors ? ' is-invalid' : '')} name={name} value={value} type="text" onChange={e => onChange(e.target.value)} onBlur={onBlur}/>;
 
 const CustomInput: FC<{ label: string, field: FieldExtra<IFieldProperties<string>> }> = ({ label, field }) => {
   const [value, setValue] = useState<string>(field.value);
@@ -37,7 +37,7 @@ const CustomInput: FC<{ label: string, field: FieldExtra<IFieldProperties<string
         <div className="form-group">
           <label>
             <span>{label}:</span>
-            <Input value={value} onChange={setValue}/>
+            <Input value={value} onChange={setValue} errors={field.errors}/>
           </label>
           <button onClick={applyHandler}>Apply</button>
           <button onClick={cancelHandler}>Cancel</button>
@@ -68,6 +68,16 @@ const App: FC = () => {
     }
   }, {
     name: {
+      validate: value => {
+
+        console.log('__VALIDATE__', value);
+
+        if (!value.length) {
+          return ['Поле обязательно для заполнения'];
+        }
+
+        return null;
+      },
       onChangeAsync: (apply, setMode) => value => {
         setMode('loading');
         setTimeout(() => {
@@ -77,7 +87,13 @@ const App: FC = () => {
       }
     },
     email: {
-      onValidate: value => null
+      validate: value => {
+        if (value.length && !/[a-z]+@[a-z]+\.[a-z]/.test(value)) {
+          return ['Неверный формат'];
+        }
+
+        return null;
+      }
     }
   });
 
@@ -89,7 +105,7 @@ const App: FC = () => {
       <CustomInput label="Имя" field={fields.name}/>
       <label className="form-group">
         E-mail:
-        <Input className="form-control" value={fields.email.value} onChange={fields.email.onChange}/>
+        <Input className="form-control" value={fields.email.value} onChange={fields.email.onChange} onBlur={fields.email.onValidate} errors={fields.email.errors}/>
       </label>
       <code>
         <pre><code>{JSON.stringify(fields, null, '  ')}</code></pre>
