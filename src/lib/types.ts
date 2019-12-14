@@ -13,9 +13,7 @@ export interface IFieldCallbacks<TValue> {
   onValidate?: (value: TValue) => null | string[];
 }
 
-export type FieldInitial<TProperties extends IFieldProperties = IFieldProperties> = IFieldProperties<TProperties['value']> & IFieldCallbacks<TProperties['value']>
-
-export type FieldExtra<TProperties extends IFieldProperties> = FieldInitial<TProperties> & {
+export type FieldExtra<TProperties extends IFieldProperties> = IFieldProperties & IFieldCallbacks<TProperties> & {
   name: string;
   mode: Mode;
   errors: null | string[];

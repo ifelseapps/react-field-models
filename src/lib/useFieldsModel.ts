@@ -46,6 +46,7 @@ export function useFieldsModel<TInitial extends FieldsInitial>(initial: TInitial
           ...result,
           [name]: {
             ...current,
+            ...currentCallbacks,
             name,
             mode: current.mode || 'edit',
             errors: isFunction(currentCallbacks.onValidate) ? currentCallbacks.onValidate(current.value) : null,
